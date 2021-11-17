@@ -7,10 +7,6 @@ window.ApexCharts = ApexCharts;
 
 const mainChart = ref()
 
-console.log('heyyy', netWorthTimeSeries.value)
-
-
-
 onMounted(() => {
   const ppfdOptions = {
     series: [{type: 'line', data: netWorthTimeSeries.value}],
@@ -52,7 +48,7 @@ onMounted(() => {
       }
     },
     tooltip: {
-      x: {format: 'HH:mm'},
+      x: {format: 'dd/MM/yyyy HH:mm'},
       y: {
         formatter: function(value) {
           const formatter = new Intl.NumberFormat('en-US', {
