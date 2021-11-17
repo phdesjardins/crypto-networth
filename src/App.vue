@@ -23,7 +23,8 @@ function fetchTransactions() {
 function createTimeSeries() {
   transactionHistory.forEach(transaction => {
     const date = transaction.createdAt
-    const timestamp = new Date(date).getTime()
+    const timestamp = Date.parse(date)
+    console.log(timestamp)
 
     updateBalance(transaction)
 
