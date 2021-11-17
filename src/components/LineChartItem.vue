@@ -9,7 +9,7 @@ const mainChart = ref()
 
 onMounted(() => {
   const ppfdOptions = {
-    series: [{type: 'line', data: netWorthTimeSeries.value}],
+    series: [{name: 'Net worth', type: 'line', data: netWorthTimeSeries.value}],
     chart: {
       id: 'net-worth-chart',
       height: '100%',

@@ -33,13 +33,14 @@ function sanitizeTransactions() {
 
 <template>
   <div id="chart-container">
+    <div id="title">Net worth chart</div>
     <LineChartItem v-if="transactionAreFetched" />
   </div>
 </template>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -47,9 +48,17 @@ function sanitizeTransactions() {
   margin-top: 60px;
 }
 
+#title {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
 #chart-container {
-  height: 70vh;
-  width: 80vw;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 108px auto 0 auto;
+  height: 60vh;
+  width: 70vw;
 }
 </style>
