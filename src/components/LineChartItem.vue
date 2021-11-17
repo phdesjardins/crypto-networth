@@ -31,7 +31,7 @@ onMounted(() => {
             style: 'currency',
             currency: 'CAD'
           });
-          return formatter.format(value)
+          return formatter.format(value).slice(0, -3)
         }
       }
     },
