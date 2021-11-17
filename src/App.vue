@@ -1,11 +1,16 @@
 <script setup>
 import LineChartItem from './components/LineChartItem.vue'
-import {addInitialTransactionToStore, updateBalance, netWorthBalance, netWorthTimeSeries, transactionHistory} from "./store";
+import {
+  addInitialTransactionToStore,
+  updateBalance,
+  transactionHistory,
+  updateTimeSeries
+} from "./store";
 import {ref} from "vue";
 
-fetchTransactions()
-
 const transactionAreFetched = ref(false)
+
+fetchTransactions()
 
 function fetchTransactions() {
   fetch('https://shakepay.github.io/programming-exercise/web/transaction_history.json')
@@ -13,35 +18,15 @@ function fetchTransactions() {
     .then(data => {
       addInitialTransactionToStore(data)
     })
-    .then(() => createTimeSeries()).finally(() => {
+    .then(() => sanitizeTransactions()).finally(() => {
       transactionAreFetched.value = true
   });
 }
 
-function compare( a, b ) {
-  const timestampA = Date.parse(a.createdAt)
-  const timestampB = Date.parse(b.createdAt)
-  if ( timestampA < timestampB ){
-    return -1;
-  }
-  if ( timestampA > timestampB ){
-    return 1;
-  }
-  return 0;
-}
-
-function createTimeSeries() {
-  //sort transactions by date
-  transactionHistory.sort( compare );
-
+function sanitizeTransactions() {
   transactionHistory.forEach(transaction => {
-    const date = transaction.createdAt
-    const timestamp = Date.parse(date)
-
     updateBalance(transaction)
-
-    const entry = {x: timestamp, y: netWorthBalance}
-    netWorthTimeSeries.value.push(entry)
+    updateTimeSeries(transaction)
   })
 }
 </script>

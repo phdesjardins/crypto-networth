@@ -20,10 +20,6 @@ const ETH_CAD_rate = conversionRates['ETH_CAD']
 
 export let transactionHistory
 
-export function addInitialTransactionToStore(initialTransactionList) {
-  transactionHistory = initialTransactionList
-}
-
 export const netWorthTimeSeries = ref([])
 
 export let netWorthBalance = 0
@@ -36,6 +32,31 @@ const currencies = {
   CAD: CAD_balance,
   BTC: BTC_balance,
   ETH: ETH_balance
+}
+
+/////////////////////// functions ////////////////////////
+
+export function addInitialTransactionToStore(initialTransactionList) {
+  transactionHistory = initialTransactionList.sort(compare)
+}
+
+function compare(a, b) {
+  const timestampA = Date.parse(a.createdAt)
+  const timestampB = Date.parse(b.createdAt)
+  if ( timestampA < timestampB ){
+    return -1;
+  }
+  if ( timestampA > timestampB ){
+    return 1;
+  }
+  return 0;
+}
+
+export function updateTimeSeries(transaction) {
+  const date = transaction.createdAt
+  const timestamp = Date.parse(date)
+  const entry = {x: timestamp, y: netWorthBalance}
+  netWorthTimeSeries.value.push(entry)
 }
 
 function applyConversionToBalance(from, to) {
