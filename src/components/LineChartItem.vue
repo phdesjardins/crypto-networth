@@ -15,16 +15,16 @@ onMounted(() => {
       height: '100%',
       width: '100%',
       toolbar: {
-        autoSelected: undefined,
-        tools: {
-          selection: false,
-          zoom: false,
-          zoomin: false,
-          zoomout: false,
-          pan: false,
-          reset: false
-        },
-        show: false,
+        // autoSelected: undefined,
+        // tools: {
+        //   selection: false,
+        //   zoom: false,
+        //   zoomin: false,
+        //   zoomout: false,
+        //   pan: false,
+        //   reset: false
+        // },
+        // show: false,
       },
     },
     xaxis: {

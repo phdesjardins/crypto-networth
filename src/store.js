@@ -40,13 +40,12 @@ const currencies = {
 }
 
 function applyConversionToBalance(from, to) {
-  const conversion = `${from.currency}_${to.currency}`
   currencies[from.currency] -= from.amount
-  currencies[to.currency] += to.amount * conversionRates[conversion]
+  currencies[to.currency] += to.amount
 }
 
 export function updateBalance(transaction) {
-  if (transaction.type === 'peer') {
+  if (transaction.direction === 'credit' || transaction.direction === 'debit') {
     const credit = transaction.direction === 'credit'
     if (credit) {
       currencies[transaction.currency] += transaction.amount
@@ -59,5 +58,7 @@ export function updateBalance(transaction) {
     applyConversionToBalance(transaction.from, transaction.to)
   }
   // balance = CAD_balance + (BTC_balance * BTC_CAD_rate) + (ETH_balance * ETH_CAD_rate)
+  console.log(transaction)
+  console.log(currencies.CAD, currencies.BTC, currencies.ETH)
   balance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
 }

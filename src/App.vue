@@ -35,6 +35,10 @@ function createTimeSeries() {
 
   transactionHistory.sort( compare );
 
+  transactionHistory.forEach(t => {
+    const date = t.createdAt
+  })
+
 
   transactionHistory.forEach(transaction => {
     const date = transaction.createdAt
