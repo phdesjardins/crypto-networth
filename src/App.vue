@@ -1,5 +1,5 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import LineChartItem from './components/LineChartItem.vue'
 import {addInitialTransactionToStore, updateBalance, balance, netWorthTimeSeries, transactionHistory} from "./store";
 import {ref} from "vue";
 
@@ -24,7 +24,6 @@ function createTimeSeries() {
   transactionHistory.forEach(transaction => {
     const date = transaction.createdAt
     const timestamp = Date.parse(date)
-    console.log(timestamp)
 
     updateBalance(transaction)
 
@@ -36,7 +35,7 @@ function createTimeSeries() {
 
 <template>
   <div id="chart-container">
-    <HelloWorld v-if="transactionAreFetched" />
+    <LineChartItem v-if="transactionAreFetched" />
   </div>
 </template>
 
