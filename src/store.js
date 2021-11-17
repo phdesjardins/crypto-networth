@@ -58,7 +58,5 @@ export function updateBalance(transaction) {
     applyConversionToBalance(transaction.from, transaction.to)
   }
   // balance = CAD_balance + (BTC_balance * BTC_CAD_rate) + (ETH_balance * ETH_CAD_rate)
-  console.log(transaction)
-  console.log(currencies.CAD, currencies.BTC, currencies.ETH)
   balance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
 }
