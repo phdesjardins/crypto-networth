@@ -55,8 +55,7 @@ export function updateBalance(transaction) {
     }
   }
 
-  const conversion = transaction.type === 'conversion'
-  if (conversion) {
+  else if (transaction.type === 'conversion') {
     applyConversionToBalance(transaction.from, transaction.to)
   }
   // balance = CAD_balance + (BTC_balance * BTC_CAD_rate) + (ETH_balance * ETH_CAD_rate)

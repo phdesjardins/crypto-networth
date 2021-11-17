@@ -15,8 +15,6 @@ function fetchTransactions() {
     })
     .then(() => createTimeSeries()).finally(() => {
       transactionAreFetched.value = true
-
-    console.log(netWorthTimeSeries)
   });
 }
 
