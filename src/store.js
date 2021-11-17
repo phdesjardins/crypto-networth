@@ -53,7 +53,6 @@ export function updateBalance(transaction) {
       currencies[transaction.currency] -= transaction.amount
     }
   }
-
   else if (transaction.type === 'conversion') {
     applyConversionToBalance(transaction.from, transaction.to)
   }

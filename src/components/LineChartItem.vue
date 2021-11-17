@@ -13,19 +13,7 @@ onMounted(() => {
     chart: {
       id: 'net-worth-chart',
       height: '100%',
-      width: '100%',
-      toolbar: {
-        // autoSelected: undefined,
-        // tools: {
-        //   selection: false,
-        //   zoom: false,
-        //   zoomin: false,
-        //   zoomout: false,
-        //   pan: false,
-        //   reset: false
-        // },
-        // show: false,
-      },
+      width: '100%'
     },
     xaxis: {
       type: 'datetime',
@@ -35,7 +23,7 @@ onMounted(() => {
     },
     yaxis: {
       title: {
-        text: 'Net worth ($CAD)'
+        text: 'Net worth'
       },
       labels: {
         formatter: function (value) {
