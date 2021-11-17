@@ -1,6 +1,6 @@
 <script setup>
 import LineChartItem from './components/LineChartItem.vue'
-import {addInitialTransactionToStore, updateBalance, balance, netWorthTimeSeries, transactionHistory} from "./store";
+import {addInitialTransactionToStore, updateBalance, netWorthBalance, netWorthTimeSeries, transactionHistory} from "./store";
 import {ref} from "vue";
 
 fetchTransactions()
@@ -40,7 +40,7 @@ function createTimeSeries() {
 
     updateBalance(transaction)
 
-    const entry = {x: timestamp, y: balance}
+    const entry = {x: timestamp, y: netWorthBalance}
     netWorthTimeSeries.value.push(entry)
   })
 }

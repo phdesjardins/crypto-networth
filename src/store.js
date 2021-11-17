@@ -26,8 +26,7 @@ export function addInitialTransactionToStore(initialTransactionList) {
 
 export const netWorthTimeSeries = ref([])
 
-export let balance = 0
-
+export let netWorthBalance = 0
 let BTC_balance = 0
 let ETH_balance = 0
 let CAD_balance = 0
@@ -57,5 +56,5 @@ export function updateBalance(transaction) {
     applyConversionToBalance(transaction.from, transaction.to)
   }
   // balance = CAD_balance + (BTC_balance * BTC_CAD_rate) + (ETH_balance * ETH_CAD_rate)
-  balance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
+  netWorthBalance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
 }
