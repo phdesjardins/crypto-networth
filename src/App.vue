@@ -19,6 +19,23 @@ function fetchTransactions() {
 }
 
 function createTimeSeries() {
+
+  //sort by date
+  function compare( a, b ) {
+    const timestampA = Date.parse(a.createdAt)
+    const timestampB = Date.parse(b.createdAt)
+    if ( timestampA < timestampB ){
+      return -1;
+    }
+    if ( timestampA > timestampB ){
+      return 1;
+    }
+    return 0;
+  }
+
+  transactionHistory.sort( compare );
+
+
   transactionHistory.forEach(transaction => {
     const date = transaction.createdAt
     const timestamp = Date.parse(date)
