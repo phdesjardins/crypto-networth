@@ -3,6 +3,12 @@
 
 Simple interactive Line Chart displaying total net worth of $CAD liquidity, BTC and ETH over time
 
+## Instructions
+
+```
+npm install
+npm run dev
+```
 
 
 ## Tech Stack
