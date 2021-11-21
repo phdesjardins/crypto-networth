@@ -19,7 +19,7 @@ const currencies = {
   ETH: ETH_balance
 }
 
-/////////////////////// functions ////////////////////////
+/////////////////////// exported functions ////////////////////////
 
 export function addInitialTransactionToStore(initialTransactionList) {
   transactionHistory = initialTransactionList.sort(compareTransactions)
@@ -44,38 +44,11 @@ export function sanitizeTransactions() {
   })
 }
 
-function compareTransactions(a, b) {
-  const timestampA = Date.parse(a.createdAt)
-  const timestampB = Date.parse(b.createdAt)
-  if ( timestampA < timestampB ){
-    return -1;
-  }
-  if ( timestampA > timestampB ){
-    return 1;
-  }
-  return 0;
-}
-
 export function updateTimeSeries(transaction) {
   const date = transaction.createdAt
   const timestamp = Date.parse(date)
   const entry = {x: timestamp, y: netWorthBalance}
   netWorthTimeSeries.value.push(entry)
-}
-
-function applyConversionToBalance(from, to) {
-  currencies[from.currency] -= from.amount
-  currencies[to.currency] += to.amount
-}
-
-function getConversationRate(date) {
-  //takes ms timestamp as a param
-  const btcRate = historicBtcRates.find(e => e.date >= date)
-  const ethRate = historicEthRates.find(e => e.date >= date)
-  return {
-    BTC_CAD_rate: btcRate.midMarketRate,
-    ETH_CAD_rate: ethRate.midMarketRate
-  }
 }
 
 export function updateBalance(transaction) {
@@ -94,4 +67,33 @@ export function updateBalance(transaction) {
   }
   // balance = CAD_balance + (BTC_balance * BTC_CAD_rate) + (ETH_balance * ETH_CAD_rate)
   netWorthBalance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
+}
+
+/////////////////////// local functions ////////////////////////
+
+function applyConversionToBalance(from, to) {
+  currencies[from.currency] -= from.amount
+  currencies[to.currency] += to.amount
+}
+
+function getConversationRate(date) {
+  //takes ms timestamp as a param
+  const btcRate = historicBtcRates.find(e => e.date >= date)
+  const ethRate = historicEthRates.find(e => e.date >= date)
+  return {
+    BTC_CAD_rate: btcRate.midMarketRate,
+    ETH_CAD_rate: ethRate.midMarketRate
+  }
+}
+
+function compareTransactions(a, b) {
+  const timestampA = Date.parse(a.createdAt)
+  const timestampB = Date.parse(b.createdAt)
+  if ( timestampA < timestampB ){
+    return -1;
+  }
+  if ( timestampA > timestampB ){
+    return 1;
+  }
+  return 0;
 }
