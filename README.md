@@ -13,8 +13,10 @@ npm run dev
 
 ## Tech Stack
 
-1.  **Vue JS**
+1. **Vue JS**
 
-1.  **Apex Charts**
+2. **Vite JS**
 
-1.  **Netlify for Hosting**
+3. **Apex Charts**
+
+4. **Netlify for Hosting**
