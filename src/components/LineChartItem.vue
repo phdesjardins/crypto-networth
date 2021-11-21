@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref} from 'vue'
 import ApexCharts from "apexcharts"
-import {netWorthTimeSeries} from "../store";
+import {BTCworthTimeSeries, ETHworthTimeSeries, netWorthTimeSeries} from "../store";
 
 window.ApexCharts = ApexCharts;
 
@@ -9,6 +9,8 @@ const mainChart = ref()
 const barChart = ref()
 
 onMounted(() => {
+  console.log('ok')
+  console.log(BTCworthTimeSeries.value)
   const options1 = {
     chart: {
       id: 'net-worth-chart',
@@ -32,7 +34,11 @@ onMounted(() => {
       curve: 'smooth',
       width: 5,
     },
-    series: [{name: 'Net worth', data: netWorthTimeSeries.value}],
+    series: [
+      {name: 'Total Net worth', data: netWorthTimeSeries.value},
+      {name: 'BTC Net worth', data: BTCworthTimeSeries.value},
+      {name: 'ETH Net worth', data: ETHworthTimeSeries.value}
+    ],
     xaxis: {
       type: 'datetime',
       labels: {
