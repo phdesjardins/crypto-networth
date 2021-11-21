@@ -1,34 +1,33 @@
 <script setup>
+import {ref} from "vue";
 import LineChartItem from './components/LineChartItem.vue'
 import services from "./services";
-
 import {
-  addInitialTransactionToStore,
-  updateBalance,
-  transactionHistory,
-  updateTimeSeries
+  addInitialTransactionToStore, addBtcRatesToStore, addEthRatesToStore, sanitizeTransactions
 } from "./store";
-import {ref} from "vue";
 
 const transactionAreFetched = ref(false)
 
-services.getTransactions()
-  .then(r => {addInitialTransactionToStore(r)})
-  .then(() => {sanitizeTransactions()})
-  .finally(() => { transactionAreFetched.value = true })
+// initial data fetches
 
-function sanitizeTransactions() {
-  transactionHistory.forEach(transaction => {
-    updateBalance(transaction)
-    updateTimeSeries(transaction)
+services.getBTCrates().then(r => addBtcRatesToStore(r)).then(() =>{
+
+  services.getETHrates().then(r => addEthRatesToStore(r)).then(() => {
+    services.getTransactions()
+      .then(r => {addInitialTransactionToStore(r)})
+      .then(() => {sanitizeTransactions()})
+      .finally(() => { transactionAreFetched.value = true })
   })
-}
+})
+
+
+
 </script>
 
 <template>
   <div id="chart-container">
     <div id="title">Net worth chart</div>
-    <LineChartItem v-if="transactionAreFetched" />
+    <LineChartItem v-if="transactionAreFetched"/>
   </div>
 </template>
 

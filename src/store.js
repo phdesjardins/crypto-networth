@@ -1,32 +1,17 @@
 import {ref} from "vue";
 
-const conversionRates = {
-  "CAD_BTC": 0.00001317,
-  "BTC_CAD": 75912.37,
-  "CAD_ETH": 0.000187382641577002,
-  "ETH_CAD": 5336.67,
-  "USD_BTC": 0.00001655,
-  "BTC_USD": 60409,
-  "USD_ETH": 0.000235469473148827,
-  "ETH_USD": 4246.83,
-  "BTC_ETH": 14.22475106685633,
-  "ETH_BTC": 0.0703,
-  "CAD_USD": 0.79,
-  "USD_CAD": 1.25
-}
-
-const BTC_CAD_rate = conversionRates['BTC_CAD']
-const ETH_CAD_rate = conversionRates['ETH_CAD']
-
 export let transactionHistory
 
 export const netWorthTimeSeries = ref([])
 
-export let netWorthBalance = 0
+let historicBtcRates = null
+let historicEthRates = null
+
+let netWorthBalance = 0
+
 let BTC_balance = 0
 let ETH_balance = 0
 let CAD_balance = 0
-
 
 const currencies = {
   CAD: CAD_balance,
@@ -37,10 +22,29 @@ const currencies = {
 /////////////////////// functions ////////////////////////
 
 export function addInitialTransactionToStore(initialTransactionList) {
-  transactionHistory = initialTransactionList.sort(compare)
+  transactionHistory = initialTransactionList.sort(compareTransactions)
 }
 
-function compare(a, b) {
+export function addBtcRatesToStore(historicRates) {
+  historicBtcRates = historicRates.map(rate => {
+    return { midMarketRate: rate.midMarketRate, date: Date.parse(rate.createdAt)}
+  })
+}
+
+export function addEthRatesToStore(historicRates) {
+  historicEthRates = historicRates.map(rate => {
+    return { midMarketRate: rate.midMarketRate, date: Date.parse(rate.createdAt)}
+  })
+}
+
+export function sanitizeTransactions() {
+  transactionHistory.forEach(transaction => {
+    updateBalance(transaction)
+    updateTimeSeries(transaction)
+  })
+}
+
+function compareTransactions(a, b) {
   const timestampA = Date.parse(a.createdAt)
   const timestampB = Date.parse(b.createdAt)
   if ( timestampA < timestampB ){
@@ -64,7 +68,19 @@ function applyConversionToBalance(from, to) {
   currencies[to.currency] += to.amount
 }
 
+function getConversationRate(date) {
+  //takes ms timestamp as a param
+  const btcRate = historicBtcRates.find(e => e.date >= date)
+  const ethRate = historicEthRates.find(e => e.date >= date)
+  return {
+    BTC_CAD_rate: btcRate.midMarketRate,
+    ETH_CAD_rate: ethRate.midMarketRate
+  }
+}
+
 export function updateBalance(transaction) {
+  const rates = getConversationRate(Date.parse(transaction.createdAt))
+  const { BTC_CAD_rate, ETH_CAD_rate } = rates
   if (transaction.direction === 'credit' || transaction.direction === 'debit') {
     const credit = transaction.direction === 'credit'
     if (credit) {
