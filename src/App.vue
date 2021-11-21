@@ -42,16 +42,16 @@ services.getBTCrates().then(r => addBtcRatesToStore(r)).then(() =>{
 }
 
 #title {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 #chart-container {
   display: flex;
   flex-direction: column;
-  margin: 108px auto 0 auto;
-  height: 60vh;
+  margin: auto;
+  height: 80vh;
   width: 70vw;
 }
 </style>
