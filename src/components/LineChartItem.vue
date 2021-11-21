@@ -9,7 +9,18 @@ const mainChart = ref()
 
 onMounted(() => {
   const ppfdOptions = {
-    series: [{name: 'Net worth', type: 'line', data: netWorthTimeSeries.value}],
+    stroke: {
+      curve: 'smooth',
+      width: 3,
+    },
+    fill: {
+      gradient: {
+        enabled: true,
+        opacityFrom: 1,
+        opacityTo: 0
+      }
+    },
+    series: [{name: 'Net worth', type: 'area', data: netWorthTimeSeries.value}],
     chart: {
       id: 'net-worth-chart',
       height: '100%',
