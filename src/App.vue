@@ -1,5 +1,7 @@
 <script setup>
 import LineChartItem from './components/LineChartItem.vue'
+import services from "./services";
+
 import {
   addInitialTransactionToStore,
   updateBalance,
@@ -10,18 +12,10 @@ import {ref} from "vue";
 
 const transactionAreFetched = ref(false)
 
-fetchTransactions()
-
-function fetchTransactions() {
-  fetch('https://shakepay.github.io/programming-exercise/web/transaction_history.json')
-    .then(response => response.json())
-    .then(data => {
-      addInitialTransactionToStore(data)
-    })
-    .then(() => sanitizeTransactions()).finally(() => {
-      transactionAreFetched.value = true
-  });
-}
+services.getTransactions()
+  .then(r => {addInitialTransactionToStore(r)})
+  .then(() => {sanitizeTransactions()})
+  .finally(() => { transactionAreFetched.value = true })
 
 function sanitizeTransactions() {
   transactionHistory.forEach(transaction => {
