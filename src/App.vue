@@ -10,17 +10,19 @@ const transactionAreFetched = ref(false)
 
 // initial data fetches
 
-services.getBTCrates().then(r => addBtcRatesToStore(r)).then(() =>{
-
-  services.getETHrates().then(r => addEthRatesToStore(r)).then(() => {
-    services.getTransactions()
-      .then(r => {addInitialTransactionToStore(r)})
-      .then(() => {sanitizeTransactions()})
-      .finally(() => { transactionAreFetched.value = true })
+Promise.all([services.getBTCrates(), services.getETHrates()])
+  .then(values => {
+    addBtcRatesToStore(values[0])
+    addEthRatesToStore(values[1])
   })
-})
-
-
+  .then(() => {
+    return services.getTransactions()
+  })
+  .then(response => {
+    addInitialTransactionToStore(response)
+    sanitizeTransactions()
+  })
+  .finally(() => { transactionAreFetched.value = true })
 
 </script>
 
