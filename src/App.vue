@@ -3,7 +3,7 @@ import {ref} from "vue";
 import LineChartItem from './components/LineChartItem.vue'
 import services from "./services";
 import {
-  addInitialTransactionToStore, addBtcRatesToStore, addEthRatesToStore, sanitizeTransactions
+  addInitialTransactionToStore, addBtcRatesToStore, addEthRatesToStore
 } from "./store";
 
 const transactionAreFetched = ref(false)
@@ -20,7 +20,6 @@ Promise.all([services.getBTCrates(), services.getETHrates()])
   })
   .then(response => {
     addInitialTransactionToStore(response)
-    sanitizeTransactions()
   })
   .finally(() => { transactionAreFetched.value = true })
 

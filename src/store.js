@@ -22,7 +22,14 @@ const currencies = {
 /////////////////////// exported functions ////////////////////////
 
 export function addInitialTransactionToStore(initialTransactionList) {
+  // store and sort transactions
   transactionHistory = initialTransactionList.sort(compareTransactions)
+
+  // sanitize each transaction
+  transactionHistory.forEach(transaction => {
+    updateBalance(transaction)
+    updateTimeSeries(transaction)
+  })
 }
 
 export function addBtcRatesToStore(historicRates) {
@@ -37,39 +44,15 @@ export function addEthRatesToStore(historicRates) {
   })
 }
 
-export function sanitizeTransactions() {
-  transactionHistory.forEach(transaction => {
-    updateBalance(transaction)
-    updateTimeSeries(transaction)
-  })
-}
+/////////////////////// local store.js functions ////////////////////////
 
-export function updateTimeSeries(transaction) {
+function updateTimeSeries(transaction) {
+  // create an entry for the line chart with the transaction date the current netWorthBalance
   const date = transaction.createdAt
   const timestamp = Date.parse(date)
   const entry = {x: timestamp, y: netWorthBalance}
   netWorthTimeSeries.value.push(entry)
 }
-
-export function updateBalance(transaction) {
-  const rates = getConversationRate(Date.parse(transaction.createdAt))
-  const { BTC_CAD_rate, ETH_CAD_rate } = rates
-  if (transaction.direction === 'credit' || transaction.direction === 'debit') {
-    const credit = transaction.direction === 'credit'
-    if (credit) {
-      currencies[transaction.currency] += transaction.amount
-    } else {
-      currencies[transaction.currency] -= transaction.amount
-    }
-  }
-  else if (transaction.type === 'conversion') {
-    applyConversionToBalance(transaction.from, transaction.to)
-  }
-  // balance = CAD_balance + (BTC_balance * BTC_CAD_rate) + (ETH_balance * ETH_CAD_rate)
-  netWorthBalance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
-}
-
-/////////////////////// local functions ////////////////////////
 
 function applyConversionToBalance(from, to) {
   currencies[from.currency] -= from.amount
@@ -77,13 +60,26 @@ function applyConversionToBalance(from, to) {
 }
 
 function getConversationRate(date) {
-  //takes ms timestamp as a param
   const btcRate = historicBtcRates.find(e => e.date >= date)
   const ethRate = historicEthRates.find(e => e.date >= date)
   return {
     BTC_CAD_rate: btcRate.midMarketRate,
     ETH_CAD_rate: ethRate.midMarketRate
   }
+}
+
+function updateBalance(transaction) {
+  const rates = getConversationRate(Date.parse(transaction.createdAt))
+  const { BTC_CAD_rate, ETH_CAD_rate } = rates
+
+  if (transaction.type === 'external account' || transaction.type === 'peer') {
+    transaction.direction === 'credit' ?
+      currencies[transaction.currency] += transaction.amount :
+      currencies[transaction.currency] -= transaction.amount
+  }
+  else applyConversionToBalance(transaction.from, transaction.to)
+
+  netWorthBalance = currencies.CAD + (currencies.BTC * BTC_CAD_rate) + (currencies.ETH * ETH_CAD_rate)
 }
 
 function compareTransactions(a, b) {
